@@ -1,0 +1,297 @@
+
+/*
+*********************************************************************************************************
+*
+*                                            ROBOT CODE
+*
+*                                         Yingborui Big Robot
+*                                              with the
+*                                   CPU STM32F103VE & Driver DRV8848
+*
+* Filename      : usart.c
+* Version       : 1.0.0
+* Programmer(s) : Fan
+*********************************************************************************************************
+*/
+
+#include "includes.h"
+
+/* **
+ *Global Variable
+ */
+unsigned char serialRec[256];
+unsigned char rxCount=0,getOutCount=0;
+
+extern System myRobot;
+
+extern OS_EVENT *ActionSem; 							////动作信号量(Forward)
+extern OS_EVENT *BackwardSem;             //动作信号量(Backward)
+extern RobotMode robotMode;
+
+//add by frank 2015-09-15T16:52
+extern INT8U actionFlag;
+extern INT8U calibrationLFlag, calibrationRFlag;
+/* ---------------------------------------------------------------------------*/
+#define LeftKneeMotor_Forward    1
+#define LeftKneeMotor_Backward	 2
+#define LeftFootMotor_Forward    3
+#define LeftFootMotor_Backward   4
+
+#define RightKneeMotor_Forward   5
+#define RightKneeMotor_Backward  6
+#define RightFootMotor_Forward   7
+#define RightFootMotor_Backward  8
+
+#define RobotSlide_Forward       9
+
+#define AllJointMotor_Stop       10
+
+#define RobotForward_Walk        11
+#define RobotBackward_Walk       12
+
+#define RobotTurnLeft_Round      13
+#define RobotTurnRight_Round     14
+
+#define RobotSlide_Backward      15
+/* ---------------------------------------------------------------------------*/
+
+/**
+ * Description :init the usart
+ */
+/* ---------------------------------------------------------------------------*/
+void UsartInit(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+	USART_InitTypeDef Usart_InitStr;
+	
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD | RCC_APB2Periph_AFIO, ENABLE);//
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2 | RCC_APB1Periph_USART3, ENABLE);
+	USART_DeInit(USART2);
+	USART_DeInit(USART3);
+//	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
+	
+	/* Configure USART2 Tx as alternate function push-pull */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
+	
+	/* USART3 Tx PD8 */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
+	
+	/* Configure USART2 Rx as input floating */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
+	
+	/* USART3 Rx PD9 */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
+	
+	//Remap USART2
+	GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
+	
+	//Remap USART3
+	GPIO_PinRemapConfig(GPIO_FullRemap_USART3, ENABLE);
+	
+	USART_StructInit(&Usart_InitStr);
+
+//
+	Usart_InitStr.USART_BaudRate			= 9600;
+	Usart_InitStr.USART_WordLength			= USART_WordLength_8b;
+	Usart_InitStr.USART_StopBits			= USART_StopBits_1;
+	Usart_InitStr.USART_Parity				= USART_Parity_No;
+	Usart_InitStr.USART_HardwareFlowControl	= USART_HardwareFlowControl_None;
+	Usart_InitStr.USART_Mode				= USART_Mode_Rx | USART_Mode_Tx;
+//
+	USART_Init(USART2, &Usart_InitStr);
+	USART_Init(USART3, &Usart_InitStr);
+//
+	USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
+//
+	USART_Cmd(USART2, ENABLE);    
+	USART_Cmd(USART3, ENABLE);
+	
+	
+
+}
+
+
+/* ============================================================================*/
+/**
+ * Description :Blueteeth translate dma set
+ *
+ * Input    :buf   ->memmery address
+ * Input    :length->translate data length
+ */
+/* ============================================================================*/
+//void Serial_SendSetDMA(const unsigned char *buf, const unsigned short length)
+//{
+//	DMA_InitTypeDef DMA_InitStr;
+//	DMA_Cmd(DMA1_Channel4, DISABLE);
+//	DMA_InitStr.DMA_PeripheralBaseAddr	= (uint32_t)(&((USART_TypeDef*)USART2)->DR);
+//	DMA_InitStr.DMA_MemoryBaseAddr		= (unsigned long)buf;
+//	DMA_InitStr.DMA_DIR					= DMA_DIR_PeripheralDST;
+//	DMA_InitStr.DMA_BufferSize			= length;
+//	DMA_InitStr.DMA_PeripheralInc		= DMA_PeripheralInc_Disable;
+//	DMA_InitStr.DMA_MemoryInc			= DMA_MemoryInc_Enable;
+//	DMA_InitStr.DMA_PeripheralDataSize	= DMA_PeripheralDataSize_Byte;
+//	DMA_InitStr.DMA_MemoryDataSize		= DMA_MemoryDataSize_Byte;
+//	DMA_InitStr.DMA_Mode				= DMA_Mode_Normal;
+//	DMA_InitStr.DMA_Priority			= DMA_Priority_High;
+//	DMA_InitStr.DMA_M2M					= DMA_M2M_Disable;
+
+//	DMA_Init(DMA1_Channel4, &DMA_InitStr);
+//	DMA_ITConfig(DMA1_Channel4, DMA_IT_TC, ENABLE);
+//	DMA_Cmd(DMA1_Channel4, ENABLE);
+//}
+
+/* ============================================================================*/
+/**
+ * Description :Send Blueteeth data,use dma
+ *
+ * Input    :buf   ->  translate data address
+ * Input    :length->  data length
+ */
+/* ============================================================================*/
+//void Serial_SendDatas(unsigned char *buf)
+//{
+//	unsigned char length;
+//#if OS_CRITICAL_METHOD == 3                           /* Allocate storage for CPU status register      */
+//	OS_CPU_SR  cpu_sr = 0;
+//#endif
+//	OS_ENTER_CRITICAL();
+//	length=buf[4]+5;
+//	if (serialsend.count)
+//	{
+//		serialsend.count++;
+//		serialsend.end->next = (SerialSendNode *)buf;
+//		serialsend.end = (SerialSendNode *)buf;
+//	}
+//	else
+//	{
+//		serialsend.count ++;
+//		serialsend.ptr = (SerialSendNode *)buf;
+//		serialsend.end = (SerialSendNode *)buf;
+//		Serial_SendSetDMA(buf, length);
+//		USART_ITConfig(USART1, USART_IT_TC, ENABLE);
+//	}
+//	OS_EXIT_CRITICAL();
+
+//}
+
+
+//串口接收任务
+void App_SerialTask(void *pdata)
+{
+		while (1)
+		{	
+			 (void)pdata;
+
+			 switch(serialRec[0])
+			 {
+	    	//Left Knee Motor
+	    	case LeftKneeMotor_Forward:
+					robotMode=BluetoothControl;
+					LeftKneeMove(30);
+		 		break;
+		 		
+		 		case LeftKneeMotor_Backward:
+					robotMode=BluetoothControl;
+					LeftKneeMove(70);
+		 		break;
+		// 		//Left Foot Motor
+		// 		case LeftFootMotor_Forward:
+		// 			TIM_SetCompare3(TIM3,20);
+		// 		break;
+		// 		
+		// 		case LeftFootMotor_Backward:
+		// 			TIM_SetCompare3(TIM3,80);
+		// 		break;	
+		// 		
+		// 		//Right Knee Motor
+				case RightKneeMotor_Forward:
+					robotMode=BluetoothControl;
+ 		 	    RightKneeMove(30);
+		 		break;
+		 		
+		 		case RightKneeMotor_Backward:
+					robotMode=BluetoothControl;
+ 		 			RightKneeMove(70);
+		 		break;
+		// 		//Right Foot Motor
+		// 		case RightFootMotor_Forward:
+		// 			TIM_SetCompare4(TIM3,20);
+		// 		break;
+		// 		
+		// 		case RightFootMotor_Backward:
+		// 			TIM_SetCompare4(TIM3,80);
+		// 		break;
+				
+				//Robot Forward
+				case RobotForward_Walk:
+// 					robotMode=Forward;
+// 					actionFlag = 1;
+
+// 					OSSemPost(ActionSem);
+
+				break;
+				
+				//Robot Backward
+				case RobotBackward_Walk:
+// 					robotMode=Backward;
+// 					actionFlag = 1;
+// 					OSSemPost(BackwardSem);//发送信号量
+				break;
+				
+				//Robot Turn Left
+				case RobotTurnLeft_Round:
+					robotMode=ToLeft;
+				break;
+				
+				//Robot Turn Right
+				case RobotTurnRight_Round:
+					robotMode=ToRight;
+				break;
+				
+				//Robot Slide Forward
+				case RobotSlide_Forward:
+					robotMode=ToSlideForward;
+				break;
+				
+				//Robot Slide Backward
+				case RobotSlide_Backward:
+					robotMode=ToSlideBackward;
+				break;
+				
+				//Robot Stop
+				case AllJointMotor_Stop:
+						if(robotMode!=BluetoothControl)
+						{
+							robotMode=ToStop;
+						}
+
+						calibrationLFlag = 0;
+						calibrationRFlag = 0;
+						
+						//制动
+						LeftFootMove(50);
+						LeftKneeMove(50);
+						LeftArmMove(50);
+						LeftWristMove(50);
+						HeadMove(50);
+						WaistMove(50);
+						RightFootMove(50);
+						RightKneeMove(50);
+						RightArmMove(50);
+						RightWristMove(50);
+				break;					   				  
+			}
+
+			serialRec[0] = 0;
+			rxCount = 0;
+			OSTimeDlyHMSM(0,0,0,1);
+		}
+}

@@ -1,0 +1,14 @@
+
+定时器运行频率设置
+Prescaler = (TIMxCLK / TIMx counter clock) - 1   //预分频设置，即设置定时器运行是的频率(TIMx counter clock)
+
+PWM 频率设置
+TIMx Frequency = TIMx counter clock/(ARR + 1)    //TIMx->ARR = TIM_TimeBaseInitStruct->TIM_Period ;
+
+PWM占空比(Duty Cycle)
+
+duty cycle = (TIMx_CCR1/ TIMx_ARR + 1)* 100     //改编CCR的值，即可改变占空比
+
+
+ TIMx->CCR1 = TIM_OCInitStruct->TIM_Pulse;
+ TIMx->PSC = TIM_TimeBaseInitStruct->TIM_Prescaler;

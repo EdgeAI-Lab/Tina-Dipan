@@ -1,0 +1,9 @@
+.\output\syscall.o: ..\Third_Party\fatfs\syscall.c
+.\output\syscall.o: D:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\output\syscall.o: ..\Third_Party\ucos\src\ucos_ii.h
+.\output\syscall.o: ..\inc\app_cfg.h
+.\output\syscall.o: ..\Third_Party\ucos\src\os_cfg.h
+.\output\syscall.o: ..\Third_Party\ucos\port\os_cpu.h
+.\output\syscall.o: ..\Third_Party\fatfs\ff.h
+.\output\syscall.o: ..\Third_Party\fatfs\integer.h
+.\output\syscall.o: ..\Third_Party\fatfs\ffconf.h

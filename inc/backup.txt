@@ -1,0 +1,180 @@
+程序备份
+
+
+/* 由于机器人的眼睛计较大，使用OLED的成本较高，所以目前决定使用LED灯泡，将OLED表情任务备份至此 2016-06-02T14:31:45 Fhc */
+
+
+/*
+*********************************************************************************************************
+*                                             App_EETask()
+*
+* Description : 机器人眼睛表情(由于表情任务有SDIO接口和I2C接口通信，所以应在临界区内执行)              
+*
+* Argument(s) : pdata.
+*
+* Return(s)   : none.
+*
+* EE					: Eye Expression
+*********************************************************************************************************
+*/
+static void App_EETask(void *pdata) 
+{
+ 	FRESULT result;
+ 	uint32_t bw;
+//  	char buf[1024];
+ 	char strBuf[50];
+ 	char sss[35];
+ 	
+ 	uint32_t cnt = 0;
+ 	uint8_t leftflname[30];
+ 	uint8_t rightflname[30];
+ 	
+ 	
+ 	static uint8_t count = 0;
+ 	static uint8_t lineNum = 1;
+	
+	//临界区
+	OS_CPU_SR  cpu_sr;
+// 	OSSemPost(ActionSem);//发送信号量
+//	INT8U err;
+	while(1)
+	{	
+		OS_ENTER_CRITICAL();				//进入临界区
+ 		/*##-1- 打开表情配置文件 */
+ 		result = f_open(&CfgFile, "0:/eye/wx.fac", FA_OPEN_EXISTING | FA_READ);
+
+ 		/*##-2- 逐行读取表情配置文件内容 */	
+ 				do
+ 				{
+ 					if(f_eof(&CfgFile) != 0) //若文件读完，则将移动指针到文件头
+ 					{
+ 						f_lseek(&CfgFile,0);
+ //						OSSemPend(BackwardSem,0,&err);
+ //						f_close(&CfgFile);
+ 					}
+ 					f_gets(sss,34,&CfgFile);
+ 					count++;
+ 				}while(count<lineNum);
+ 				
+ 	  /*##-3- 关闭表情配置文件 */
+ 			f_close(&CfgFile);	
+ 			
+ 		/*##-4- 取出表情文件名 */
+ 			sscanf((const char *)sss, "%u %s %[^;]" ,&cnt, leftflname, rightflname);
+ 			
+ 		/*##-5- 合成表情文件的绝对路径 */
+ 			sprintf((char *)strBuf, "0:/eye/bin/%s", leftflname);
+				
+ 		/*##-6- 打开表情文件 */
+ 			result = f_open(&oledFile, (const TCHAR*)strBuf, FA_OPEN_EXISTING | FA_READ);	
+				
+ 		/*##-7- 读取表情文件数据到buf */
+ 			result = f_read(&oledFile, &SDbuf, sizeof(SDbuf) - 1, &bw);
+			
+ 		/*##-8- 关闭表情文件 */
+ 			f_close(&oledFile);	
+			OS_EXIT_CRITICAL();					//退出临界区
+			
+		/*##-9- 将表情数据通过I2C传送到OLED显示 */
+				
+ 			if (bw > 0)//判断是否从表情文件中读取到数据(0: 未读取到数据,  >0: 读取到数据)
+ 			{
+ 				SDbuf[bw] = 0;
+				OS_ENTER_CRITICAL();				//进入临界区
+ 				OLED_DrawBMP(20,0,116,8,(unsigned char *)SDbuf);	
+				OS_EXIT_CRITICAL();					//退出临界区	
+ 				count = 0;
+ 				lineNum++;
+ 				OSTimeDlyHMSM(0,0,0,cnt);
+ 			}
+ 			else
+ 			{
+//  			printf("\r\TheFile.TXT : \r\n");		
+ 			}
+			OSTimeDlyHMSM(0,0,0,1);
+	}
+}
+
+
+		speach_mode = IsDetected(speach_IR);
+		//红外检测，进入语音交互区，发送指令进入语音交互模式
+		if(speach_mode)
+		{
+				if(speach_flag == 0)
+				{
+					 while((USART3->SR&0X40)==0);//循环发送,直到发送完毕   
+					 USART3->DR = (u8)0X01; 
+					 speach_flag = 1;
+					 light_mode = 1;
+					//挥手打招呼
+					 LeftArmMove(99);      //抬起左手臂
+					 OSTimeDlyHMSM(0,0,1,500);
+					 LeftArmMove(50);
+					
+					 LeftWristMove(90);	   //摆动左手腕
+					 OSTimeDlyHMSM(0,0,0,500);
+					 LeftWristMove(50);
+					 OSTimeDlyHMSM(0,0,0,500);
+					 LeftWristMove(90);
+					 OSTimeDlyHMSM(0,0,0,500);
+					 LeftWristMove(70);    //手腕复位
+					
+					 LeftArmMove(1);     //放下右臂
+					 while(GPIO_ReadInputDataBit(GPIOG,GPIO_Pin_9));  //PG10	
+					 LeftArmMove(90);					
+					 OSTimeDlyHMSM(0,0,0,300);
+					 LeftArmMove(50);
+				}
+		}
+		else if (!speach_mode)
+		{
+				if(speach_flag == 1)
+				{
+						while((USART3->SR&0X40)==0);//循环发送,直到发送完毕   
+						USART3->DR = (u8)0X02;
+						speach_flag = 0;
+					  light_mode = 0;
+				}
+		}
+			
+			
+			
+/**************************************************指令编码********************************************************/
+//机器人整体运动(为防止蓝牙模块的干扰，所以不用0和1做指令编码)
+#define RobotWalkForward     2  //前进
+#define RobotWalkBackward    3  //后退
+#define RobotTurnLeft        4  //左转
+#define RobotTurnRight       5  //右转
+#define RobotSlideForward    6  //向前滑行
+#define RobotSlideBackward   7  //向后滑行
+
+//头部
+#define HeadSwing            8  //摇头 摇摇头 动动小脖子 拨浪鼓摇起来
+
+//手臂
+#define WaveLeftArm	         9  //挥挥左手 
+#define WaveRightArm         10  //挥挥右手 
+
+//腰部
+#define WaistSwing           11 //摆动腰部 扭扭腰 扭扭小屁股 风中摇摆
+
+//腿部
+#define LegsMove             12 //动动腿 走两步
+
+//装饰灯
+#define TurnOnDecorateLeds   13 //打开装饰灯
+#define TurnOffDecorateLeds  14 //关闭装饰灯
+#define BlinkDecorateLeds    15 //闪烁装饰灯
+
+//组合动作
+#define Great                16 //我很棒
+#define Helpless             17 //我也很无奈
+#define Excited              18 //我好兴奋 
+
+//眼睛
+
+
+//停止机器人所有关节
+#define AllJointMotorStop    127 //停止
+			
+			

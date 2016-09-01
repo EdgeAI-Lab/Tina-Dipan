@@ -1,0 +1,49 @@
+*** Creating Trace Output File '.\Output\STM_Library.tra' Ok.
+### Preparing for ADS-LD.
+### Creating ADS-LD Command Line
+### List of Objects: adding '".\output\app.o"'
+### List of Objects: adding '".\output\app_hooks.o"'
+### List of Objects: adding '".\output\stm32f10x_it.o"'
+### List of Objects: adding '".\output\memmanage.o"'
+### List of Objects: adding '".\output\bsp.o"'
+### List of Objects: adding '".\output\motorctrl.o"'
+### List of Objects: adding '".\output\adc_to_angle.o"'
+### List of Objects: adding '".\output\myfun.o"'
+### List of Objects: adding '".\output\ir.o"'
+### List of Objects: adding '"..\library\STM_Library.lib"'
+### List of Objects: adding '".\output\bsp_sdio_sd.o"'
+### List of Objects: adding '".\output\os_core.o"'
+### List of Objects: adding '".\output\os_dbg.o"'
+### List of Objects: adding '".\output\os_flag.o"'
+### List of Objects: adding '".\output\os_mbox.o"'
+### List of Objects: adding '".\output\os_mem.o"'
+### List of Objects: adding '".\output\os_mutex.o"'
+### List of Objects: adding '".\output\os_q.o"'
+### List of Objects: adding '".\output\os_sem.o"'
+### List of Objects: adding '".\output\os_task.o"'
+### List of Objects: adding '".\output\os_time.o"'
+### List of Objects: adding '".\output\os_tmr.o"'
+### List of Objects: adding '".\output\os_cpu_a.o"'
+### List of Objects: adding '".\output\os_cpu_c.o"'
+### List of Objects: adding '".\output\diskio.o"'
+### List of Objects: adding '".\output\ff.o"'
+### List of Objects: adding '".\output\delay.o"'
+### List of Objects: adding '".\output\usart.o"'
+### List of Objects: adding '".\output\ul.o"'
+### List of Objects: adding '".\output\oled.o"'
+### ADS-LD Command completed:
+--cpu Cortex-M3 ".\output\app.o" ".\output\app_hooks.o" ".\output\stm32f10x_it.o" ".\output\memmanage.o" ".\output\bsp.o" ".\output\motorctrl.o" ".\output\adc_to_angle.o" ".\output\myfun.o" ".\output\ir.o" C:\Users\Administrator\Desktop\Robot2016-3-10µçÎ»Æ÷ÂË²¨\library\STM_Library.lib ".\output\bsp_sdio_sd.o" ".\output\os_core.o" ".\output\os_dbg.o" ".\output\os_flag.o" ".\output\os_mbox.o" ".\output\os_mem.o" ".\output\os_mutex.o" ".\output\os_q.o" ".\output\os_sem.o" ".\output\os_task.o" ".\output\os_time.o" ".\output\os_tmr.o" ".\output\os_cpu_a.o" ".\output\os_cpu_c.o" ".\output\diskio.o" ".\output\ff.o" ".\output\delay.o" ".\output\usart.o" ".\output\ul.o" ".\output\oled.o" 
+--strict --scatter ".\Output\STM_Library.sct" 
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+ --list ".\STM_Library.map" -o .\Output\STM_Library.axf### Preparing Environment (PrepEnvAds)
+### ADS-LD Output File: '.\Output\STM_Library.axf'
+### ADS-LD Command File: '.\Output\STM_Library.lnp'
+### Checking for dirty Components...
+### Creating CmdFile '.\Output\STM_Library.lnp', Handle=0x000009CC
+### Writing '.lnp' file
+### ADS-LD Command file '.\Output\STM_Library.lnp' is ready.
+### ADS-LD: About to start ADS-LD Thread.
+### ADS-LD: executed with 0 errors
+### Updating obj list
+### LDADS_file() completed.

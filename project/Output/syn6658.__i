@@ -1,0 +1,5 @@
+-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\library\STM32F10x_StdPeriph_Driver\inc -I..\library\CMSIS\CM3\DeviceSupport\ST\STM32F10x -I..\library\CMSIS\CM3\CoreSupport -I..\inc -I..\Third_Party\fatfs -I..\Third_Party\ucos\src -I..\Third_Party\ucos\port -I..\library 
+-I D:\Keil\ARM\RV31\INC 
+-I D:\Keil\ARM\CMSIS\Include 
+-I D:\Keil\ARM\Inc\ST\STM32F10x 
+-DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER -o ".\Output\syn6658.o" --omf_browse ".\Output\syn6658.crf" --depend ".\Output\syn6658.d" "..\src\syn6658.c"
