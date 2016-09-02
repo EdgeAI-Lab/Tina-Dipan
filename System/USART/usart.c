@@ -244,8 +244,8 @@ void App_SerialTask(void *pdata)
 //							 actionFlag = 1;			//1：执行摆臂动作 0：不执行摆臂动作
 //							 robotMode = Forward;
 //							 OSSemPost(ActionSem);
-									LeftWheelMove(100);
-									RightWheelMove(100);
+								LeftWheelMove(80);
+									RightWheelMove(80);	
 					
 					
 							 break;
@@ -255,9 +255,9 @@ void App_SerialTask(void *pdata)
 //							 robotMode=Backward;
 //							 actionFlag = 1;
 //							 OSSemPost(BackwardSem);//发送信号量
-					
-									LeftWheelMove(80);
-									RightWheelMove(80);
+									LeftWheelMove(10);
+									RightWheelMove(10);
+									
 							 break;
 					
 					// 4:Robot Turn Left
@@ -265,9 +265,9 @@ void App_SerialTask(void *pdata)
 //							 robotMode=ToLeft;
 //							 OSSemPost(ActionSem);
 					
-//									LeftWheelMove(40);
-//									RightWheelMove(20);
-					WaistMove(20);
+									LeftWheelMove(20);
+									RightWheelMove(80);
+//					WaistMove(20);
 					
 							 break;
 					
@@ -276,9 +276,9 @@ void App_SerialTask(void *pdata)
 //							 robotMode=ToRight;
 //							 OSSemPost(ActionSem);
 					
-//					LeftWheelMove(20);
-//					RightWheelMove(40);
-					WaistMove(80);
+					LeftWheelMove(80);
+					RightWheelMove(20);
+//					WaistMove(80);
 							 break;
 					 
 					// 6:Robot Slide Forward

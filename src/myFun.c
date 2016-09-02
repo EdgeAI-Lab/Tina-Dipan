@@ -20,6 +20,8 @@ extern float  WaistPosition;
 /*
  *	使腰部复位
  *	此函数需循环执行，腰部复位后，自行停止
+ *  从机器人背面看，电位器中间为0，左边为负值，右边为正值（与数学的X轴一样）
+ *  ... -20  -10  0  10  20 ...  
  *
  */
  
@@ -48,8 +50,9 @@ void resetWaist(float a)
 /*
  *	此函数用于摆动腰部
  *
- *	LA: Left Angle
- *	RA: Right Angle
+ *	LA: Left Angle(minus)
+ *	RA: Right Angle(positive number)
+ *  zero point in the middle of the potentiometer
  */
 void moveWaist(int LA, int RA, unsigned char speed)
 {

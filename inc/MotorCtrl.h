@@ -65,13 +65,16 @@ void Adc_Init(void);
 #define RightKneeMove(Speed)		  	TIM_SetCompare4(TIM3, Speed)
 
 // 左臂、右臂
+// 抬起 > 50    放下 < 50
 #define	LeftArmMove(Speed)					TIM_SetCompare3(TIM2, Speed)
 #define RightArmMove(Speed)				  TIM_SetCompare4(TIM2, Speed)
 
-//waist 腰部直流电机PWM接口
+// waist
+// 向左摆 < 50   向右摆 > 50
 #define WaistMove(Speed)				  	TIM_SetCompare1(TIM1, Speed)
 
-// 左脚、左膝
+// 底盘左轮、底盘右轮（驱动轮为前、万向轮为后）
+// 前进 > 50     后退 < 50
 #define LeftWheelMove(Speed)					TIM_SetCompare1(TIM3, Speed)
 #define RightWheelMove(Speed)				  TIM_SetCompare2(TIM3, Speed)
 
