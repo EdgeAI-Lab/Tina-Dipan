@@ -56,14 +56,6 @@ void Adc_Init(void);
 #define LeftWristMove(Speed)				TIM_SetCompare2(TIM5, Speed)
 #define	RightWristMove(Speed)				TIM_SetCompare3(TIM5, Speed)
 
-// 左脚、左膝
-#define LeftFootMove(Speed)					TIM_SetCompare1(TIM3, Speed)
-#define LeftKneeMove(Speed)				  TIM_SetCompare2(TIM3, Speed)
-
-// 右脚、右膝
-#define	RightFootMove(Speed)				TIM_SetCompare3(TIM3, Speed)
-#define RightKneeMove(Speed)		  	TIM_SetCompare4(TIM3, Speed)
-
 // 左臂、右臂
 // 抬起 > 50    放下 < 50
 #define	LeftArmMove(Speed)					TIM_SetCompare3(TIM2, Speed)
@@ -77,6 +69,10 @@ void Adc_Init(void);
 // 前进 > 50     后退 < 50
 #define LeftWheelMove(Speed)					TIM_SetCompare1(TIM3, Speed)
 #define RightWheelMove(Speed)				  TIM_SetCompare2(TIM3, Speed)
+
+//机器人移动
+// Forward: Speed[50,100]     Backward: Speed[0,50]
+#define RobotMove(Speed)						  TIM_SetCompare1(TIM3, Speed);TIM_SetCompare2(TIM3, Speed)
 
 #endif
 

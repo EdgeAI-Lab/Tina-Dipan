@@ -247,11 +247,8 @@ void motorCfg(void)
 
 	LeftArmMove(50);
 	RightArmMove(50);
-	
-	LeftKneeMove(50);
-	RightKneeMove(50);
 
-	LeftFootMove(50);
-	RightFootMove(50);
+	LeftWheelMove(50);
+	RightWheelMove(50);
 }
 

@@ -244,8 +244,8 @@ void App_SerialTask(void *pdata)
 //							 actionFlag = 1;			//1：执行摆臂动作 0：不执行摆臂动作
 //							 robotMode = Forward;
 //							 OSSemPost(ActionSem);
-								LeftWheelMove(80);
-									RightWheelMove(80);	
+
+								RobotMove(80);
 					
 					
 							 break;
@@ -255,8 +255,7 @@ void App_SerialTask(void *pdata)
 //							 robotMode=Backward;
 //							 actionFlag = 1;
 //							 OSSemPost(BackwardSem);//发送信号量
-									LeftWheelMove(10);
-									RightWheelMove(10);
+								RobotMove(10);
 									
 							 break;
 					
@@ -264,10 +263,8 @@ void App_SerialTask(void *pdata)
 					case RobotTurnLeft:
 //							 robotMode=ToLeft;
 //							 OSSemPost(ActionSem);
-					
 									LeftWheelMove(20);
 									RightWheelMove(80);
-//					WaistMove(20);
 					
 							 break;
 					
@@ -275,21 +272,20 @@ void App_SerialTask(void *pdata)
 					case RobotTurnRight:
 //							 robotMode=ToRight;
 //							 OSSemPost(ActionSem);
-					
-					LeftWheelMove(80);
-					RightWheelMove(20);
-//					WaistMove(80);
+								LeftWheelMove(80);
+								RightWheelMove(20);
+
 							 break;
-					 
-					// 6:Robot Slide Forward
-					case RobotSlideForward:
-						   robotMode=SlideForward;
-					     break;
 					
-					// 7:Robot Slide Backward
-					case RobotSlideBackward:
-						   robotMode=SlideBackward;
-					     break;
+					// 6
+					case HeadTurnLeft:
+						HeadMove(50);
+								break;
+					
+					// 7
+					case HeadTurnRight:
+						HeadMove(70);
+								break;
 					
 					// 8:Robot Head Swing 
 					case HeadSwing:
@@ -299,8 +295,18 @@ void App_SerialTask(void *pdata)
 							 OSTimeDlyHMSM(0,0,0,500);
                HeadMove(70);
 					     break;			
+					
+					// 9
+					case LeftArmUp:
+						LeftArmMove(80);
+								break;
+					
+					// 10
+					case LeftArmDown:
+						LeftArmMove(25);
+								break;
 
-					// 9:Robot Wave Left Arm 
+					// 11:Robot Wave Left Arm 
 					case WaveLeftArm:
 						
 							 //Robot Left Arm Up
@@ -326,8 +332,18 @@ void App_SerialTask(void *pdata)
 							 LeftArmMove(50);
 							
 					     break;
+							 
+					// 12 
+					case RightArmUp:
+						RightArmMove(80);
+								break;
 					
-					// 10:Robot Wave Right Arm 
+					// 13
+					case RightArmDown:
+						RightArmMove(25);
+								break;
+					
+					// 14:Robot Wave Right Arm 
 					case WaveRightArm:
 							
 					     //Robot Right Arm Up
@@ -354,23 +370,52 @@ void App_SerialTask(void *pdata)
 					
 					     break;
 				
+				
+					// 15
+				  case LeftWristTurnLeft:
+						LeftWristMove(90);
+						
+								break;
+					
+					
+					// 16
+					case LeftWristTurnRight:
+						LeftWristMove(50);
+								break;
+					
+					// 17
+					case RightWristTurnLeft:
+						RightWristMove(50);
+								break;
+					
+					// 18
+					case RightWristTurnRight:
+						RightWristMove(90);
+								break;
+					
+					// 19
+					case WaistTurnLeft:
+						WaistMove(40);
+								break;
+					
+					// 20
+					case WaistTurnRight:
+						WaistMove(60);
+								break;
+					
+
 		
-				  // 11:Robot Waist Swing
+				  // 21:Robot Waist Swing
 					case WaistSwing:
 							 WaistMode = Swing;
 					     break;
 					
 						
-					// 12:Dance 
+					// 22:Dance 
 					case Dance:
 						  OSTaskResume(20); //恢复舞蹈任务	
 							OSSemPost(DanceSem);//发送信号量
 					     break;
-						
-					// 13:Robot Swing Waist 
-//					case TurnOffDecorateLeds:
-//							
-//					     break;
 						
 					// 126:suspend dance task 
 					case SuspendDanceTask:
@@ -396,19 +441,18 @@ void App_SerialTask(void *pdata)
 	//						}
 							
 							//制动
-	// 						LeftFootMove(50);
-	// 						LeftKneeMove(50);
-	// 						LeftArmMove(50);
-	// 						LeftWristMove(50);
-	// 						HeadMove(50);
-	// 						WaistMove(50);
-	// 						RightFootMove(50);
-	// 						RightKneeMove(50);
-	// 						RightArmMove(50);
-	// 						RightWristMove(50);
-	
-					LeftWheelMove(50);
-					RightWheelMove(50);
+		
+							HeadMove(70);
+							LeftWristMove(70);
+							RightWristMove(70);
+							
+							WaistMove(50);
+
+							LeftArmMove(50);
+							RightArmMove(50);
+			
+							LeftWheelMove(50);
+							RightWheelMove(50);
 	
 								break;					   				  
 			}
@@ -454,15 +498,6 @@ void ExecuteAction(u8 action){
 					 OSSemPost(ActionSem);
 					 break;
 			 
-			// 6:Robot Slide Forward
-			case RobotSlideForward:
-					 robotMode=SlideForward;
-					 break;
-			
-			// 7:Robot Slide Backward
-			case RobotSlideBackward:
-					 robotMode=SlideBackward;
-					 break;
 			
 			// 8:Robot Head Swing 
 			case HeadSwing:

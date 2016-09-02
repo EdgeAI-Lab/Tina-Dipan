@@ -21,46 +21,58 @@
 
 void ExecuteAction(u8 action);
 
-/**************************************************指令编码********************************************************/
+/******************************** 指令编码 - 底盘式机器人 **********************************/
 //机器人整体运动（为了防止蓝牙模块的干扰，所以不用0和1做指令编码）
+
+/*start********************************** 机器人整体运动 ******************************************/
+
 #define RobotWalkForward     2  //前进
 #define RobotWalkBackward    3  //后退
 #define RobotTurnLeft        4  //左转
 #define RobotTurnRight       5  //右转
-#define RobotSlideForward    6  //向前滑行
-#define RobotSlideBackward   7  //向后滑行
 
-//头部
-#define HeadSwing            8  //摇头 摇摇头 动动小脖子 拨浪鼓摇起来
+/*end********************************** 机器人整体运动 ******************************************/
 
-//手臂
-#define WaveLeftArm	         9  //挥挥左手
-#define WaveRightArm         10  //挥挥右手
 
-//腰部
-#define WaistSwing           11 //摆动腰部 扭扭腰 扭扭小屁股 风中摇摆
+/*start*********************** 机器人各关节独立运动(包括眼睛) *********************************/
 
-//跳舞
-#define Dance                12 //跳舞
+//
+#define HeadTurnLeft         6  //
+#define HeadTurnRight	       7  //
+#define HeadSwing            8  //
 
-//装饰灯
-#define TurnOnDecorateLeds   13 //打开装饰灯
-#define TurnOffDecorateLeds  14 //关闭装饰灯
-#define BlinkDecorateLeds    15 //闪烁装饰灯
+//
+#define LeftArmUp            9   //
+#define LeftArmDown          10  //
+#define WaveLeftArm	         11  //
 
-//组合动作
-#define Great                16 //我很棒
-#define Helpless             17 //我也很无奈
-#define Excited              18 //我好兴奋
+#define RightArmUp           12  //
+#define RightArmDown         13  //
+#define WaveRightArm         14  //
 
-//眼睛
+//
+#define LeftWristTurnLeft    15  //
+#define LeftWristTurnRight   16  //
+
+#define RightWristTurnLeft   17  //
+#define RightWristTurnRight  18  //
+
+//
+#define WaistTurnLeft        19  //
+#define WaistTurnRight       20  //
+#define WaistSwing           21  //
+//
+
+/*end*********************** 机器人各关节独立运动(包括眼睛) *********************************/
+
+
+#define Dance                22
 
 //挂起舞蹈任务
 #define SuspendDanceTask     126
 
 //停止机器人所有关节
 #define AllJointMotorStop    127 //停止
-
 
 
 /* ---------------------------------------------------------------------------*/

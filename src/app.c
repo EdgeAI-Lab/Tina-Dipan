@@ -1209,24 +1209,16 @@ static void App_SuspendResumeTask(void *pdata)
 
 				LeftArmMove(50);
 				RightArmMove(50);
-				
-				LeftKneeMove(50);
-				RightKneeMove(50);
-
-				LeftFootMove(50);
-				RightFootMove(50);
 
 				if((PDropL==1) && (PDropR==0))
 				{
 						//左转矫正
-						LeftFootMove(90);
-						RightFootMove(5);
+
 				}
 				else if((PDropR==1) && (PDropL==0))
 				{
 						//右转矫正
-						LeftFootMove(5);
-						RightFootMove(90);
+
 				}
 				SuspendResume = 1;	
 		}
@@ -1241,11 +1233,10 @@ static void App_SuspendResumeTask(void *pdata)
 				OSTaskResume(14); //右摆臂任务(SRA: Swing Right Arm)
 				OSTaskResume(15); //左摆臂任务(SLA: Swing Left Arm)
 			
-				if(robotMode == SlideForward)
-				{
-						LeftFootMove(5);
-						RightFootMove(5);
-				}
+//				if(robotMode == SlideForward)
+//				{
+
+//				}
 				SuspendResume = 0;
 		}
 // 		OS_EXIT_CRITICAL();					//退出临界区
