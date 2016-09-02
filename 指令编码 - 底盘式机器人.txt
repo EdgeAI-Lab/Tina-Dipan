@@ -1,48 +1,53 @@
 
-                                            /* Ö¸Áî±àÂë - µ×ÅÌÊ½»úÆ÷ÈË */
+                                            /* æŒ‡ä»¤ç¼–ç  - åº•ç›˜å¼æœºå™¨äºº */
 
-/*start********************************** »úÆ÷ÈËÕûÌåÔË¶¯ ******************************************/
+/*start********************************** æœºå™¨äººæ•´ä½“è¿åŠ¨ ******************************************/
 
-#define RobotWalkForward     2  //Ç°½ø
-#define RobotWalkBackward    3  //ºóÍË
-#define RobotTurnLeft        4  //×ó×ª
-#define RobotTurnRight       5  //ÓÒ×ª
+#define RobotWalkForward     2  //å‰è¿›
+#define RobotWalkBackward    3  //åé€€
+#define RobotTurnLeft        4  //å·¦è½¬
+#define RobotTurnRight       5  //å³è½¬
 
-/*end********************************** »úÆ÷ÈËÕûÌåÔË¶¯ ******************************************/
-
-
-/*start*********************** »úÆ÷ÈË¹Ø½Ú¶ÀÁ¢ÔË¶¯Ö¸Áî£¨°üÀ¨ÑÛ¾¦£© *********************************/
-
-//Í·²¿
-#define HeadTurnLeft         6  //Ïò×ó×ªÍ·
-#define HeadTurnRight	     7  //ÏòÓÒ×ªÍ·
-#define HeadSwing            8  //Ò¡Í· Ò¡Ò¡Í· ¶¯¶¯Ğ¡²±×Ó ²¦ÀË¹ÄÒ¡ÆğÀ´
-
-//ÊÖ±Û
-#define LeftArmUp            9   //Ì§Æğ×óÊÖ
-#define LeftArmDown          10  //·ÅÏÂ×óÊÖ
-#define WaveLeftArm	     11  //»Ó»Ó×óÊÖ 
-
-#define RightArmUp           12  //Ì§ÆğÓÒÊÖ
-#define RightArmDown         13  //·ÅÏÂÓÒÊÖ
-#define WaveRightArm         14  //»Ó»ÓÓÒÊÖ
-
-//ÊÖÍó
-#define LeftWristTurnLeft    15  //×óÊÖÍóÏò×ó×ª
-#define LeftWristTurnRight   16  //×óÊÖÍóÏòÓÒ×ª
-
-#define RightWristTurnLeft   15  //ÓÒÊÖÍóÏò×ó×ª
-#define RightWristTurnRight  16  //ÓÒÊÖÍóÏòÓÒ×ª
-
-//Ñü²¿
-#define WaistTurnLeft        17  //Ñü²¿Ïò×ó°Ú¶¯
-#define WaistTurnRight       18  //Ñü²¿ÏòÓÒ°Ú¶¯
-#define WaistSwing           19  //°Ú¶¯Ñü²¿ Å¤Å¤Ñü Å¤Å¤Ğ¡Æ¨¹É ·çÖĞÒ¡°Ú
-
-//ÑÛ¾¦
-
-/*end*********************** »úÆ÷ÈË¹Ø½Ú¶ÀÁ¢ÔË¶¯Ö¸Áî *********************************/
+/*end********************************** æœºå™¨äººæ•´ä½“è¿åŠ¨ ******************************************/
 
 
-//Í£Ö¹»úÆ÷ÈËËùÓĞ¹Ø½Ú
-#define AllJointMotorStop    127 //Í£Ö¹
+/*start*********************** æœºå™¨äººå…³èŠ‚ç‹¬ç«‹è¿åŠ¨æŒ‡ä»¤ï¼ˆåŒ…æ‹¬çœ¼ç›ï¼‰ *********************************/
+
+//å¤´éƒ¨
+#define HeadTurnLeft         6  //å‘å·¦è½¬å¤´
+#define HeadTurnRight	     7  //å‘å³è½¬å¤´
+#define HeadSwing            8  //æ‘‡å¤´ æ‘‡æ‘‡å¤´ åŠ¨åŠ¨å°è„–å­ æ‹¨æµªé¼“æ‘‡èµ·æ¥
+
+//æ‰‹è‡‚
+#define LeftArmUp            9   //æŠ¬èµ·å·¦æ‰‹
+#define LeftArmDown          10  //æ”¾ä¸‹å·¦æ‰‹
+#define WaveLeftArm	     11  //æŒ¥æŒ¥å·¦æ‰‹ 
+
+#define RightArmUp           12  //æŠ¬èµ·å³æ‰‹
+#define RightArmDown         13  //æ”¾ä¸‹å³æ‰‹
+#define WaveRightArm         14  //æŒ¥æŒ¥å³æ‰‹
+
+//æ‰‹è…•
+#define LeftWristTurnLeft    15  //å·¦æ‰‹è…•å‘å·¦è½¬
+#define LeftWristTurnRight   16  //å·¦æ‰‹è…•å‘å³è½¬
+
+#define RightWristTurnLeft   17  //å³æ‰‹è…•å‘å·¦è½¬
+#define RightWristTurnRight  18  //å³æ‰‹è…•å‘å³è½¬
+
+//è…°éƒ¨
+#define WaistTurnLeft        19  //è…°éƒ¨å‘å·¦æ‘†åŠ¨
+#define WaistTurnRight       20  //è…°éƒ¨å‘å³æ‘†åŠ¨
+#define WaistSwing           21  //æ‘†åŠ¨è…°éƒ¨ æ‰­æ‰­è…° æ‰­æ‰­å°å±è‚¡ é£ä¸­æ‘‡æ‘†
+
+//çœ¼ç›
+
+/*end*********************** æœºå™¨äººå…³èŠ‚ç‹¬ç«‹è¿åŠ¨æŒ‡ä»¤ *********************************/
+
+#define Dance                22
+
+
+//æŒ‚èµ·èˆè¹ˆä»»åŠ¡
+#define SuspendDanceTask     126
+
+//åœæ­¢æœºå™¨äººæ‰€æœ‰å…³èŠ‚
+#define AllJointMotorStop    127 //åœæ­¢
