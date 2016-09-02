@@ -1,0 +1,48 @@
+
+                                            /* 指令编码 - 底盘式机器人 */
+
+/*start********************************** 机器人整体运动 ******************************************/
+
+#define RobotWalkForward     2  //前进
+#define RobotWalkBackward    3  //后退
+#define RobotTurnLeft        4  //左转
+#define RobotTurnRight       5  //右转
+
+/*end********************************** 机器人整体运动 ******************************************/
+
+
+/*start*********************** 机器人关节独立运动指令（包括眼睛） *********************************/
+
+//头部
+#define HeadTurnLeft         6  //向左转头
+#define HeadTurnRight	     7  //向右转头
+#define HeadSwing            8  //摇头 摇摇头 动动小脖子 拨浪鼓摇起来
+
+//手臂
+#define LeftArmUp            9   //抬起左手
+#define LeftArmDown          10  //放下左手
+#define WaveLeftArm	     11  //挥挥左手 
+
+#define RightArmUp           12  //抬起右手
+#define RightArmDown         13  //放下右手
+#define WaveRightArm         14  //挥挥右手
+
+//手腕
+#define LeftWristTurnLeft    15  //左手腕向左转
+#define LeftWristTurnRight   16  //左手腕向右转
+
+#define RightWristTurnLeft   15  //右手腕向左转
+#define RightWristTurnRight  16  //右手腕向右转
+
+//腰部
+#define WaistTurnLeft        17  //腰部向左摆动
+#define WaistTurnRight       18  //腰部向右摆动
+#define WaistSwing           19  //摆动腰部 扭扭腰 扭扭小屁股 风中摇摆
+
+//眼睛
+
+/*end*********************** 机器人关节独立运动指令 *********************************/
+
+
+//停止机器人所有关节
+#define AllJointMotorStop    127 //停止
